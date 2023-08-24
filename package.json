@@ -22,10 +22,18 @@
     "sqlite3": "^5.1.6",
     "uuid": "^9.0.0"
   },
-  "name": "desafio-02",
+  "name": "aula-fc-clean-arch",
   "description": "",
   "version": "1.0.0",
   "main": "index.js",
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jhls/fc-clean-architecture.git"
+  },
+  "bugs": {
+    "url": "https://github.com/jhls/fc-clean-architecture/issues"
+  },
+  "homepage": "https://github.com/jhls/fc-clean-architecture#readme"
 }
