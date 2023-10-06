@@ -1,23 +1,22 @@
+import Entity from "../../@shared/entity/entity.abstract";
 import EventDispatcher from "../../@shared/event/event-dispatcher";
+import NotificationError from "../../@shared/notification/notification.error";
 import ChangeAddressEvent from "../event/change-address.event";
 import CustomerCreatedEvent from "../event/customer-created.event";
 import Address from "../value-object/address";
 
 
    
-export default class Customer{
+export default class Customer extends Entity{
 
-    private _id: string;
     private _name: string;
     private _address!: Address;
-	
-	
-
 	private _active: boolean = false;
 	private _rewardPoints: number =0;
 
     constructor(id: string, name: string, eventDispatcher:EventDispatcher = null) {
-        this._id = id;
+		super();
+		this._id = id;
         this._name = name;
 		this.validate();
 		
@@ -25,15 +24,25 @@ export default class Customer{
 			const customerCreatedEvent: CustomerCreatedEvent = new CustomerCreatedEvent([]);
 			eventDispatcher.notify(customerCreatedEvent);
 		}
+
+		if(this.notification.hasErrors()){
+			throw new NotificationError(this.notification.getErrors());
+		}
 		
     }
 
 	validate(){
-		if(this._id.length === 0){
-			throw new Error("Id is required")
+		if(this.id.length === 0){
+			this.notification.addError({
+				message:"Id is required",
+				context:"customer",
+			});
 		}
 		if(this._name.length === 0 ){
-			throw new Error("Name is required")
+			this.notification.addError({
+				message:"Name is required",
+				context:"customer",
+			});
 		}
 	}
 
@@ -78,19 +87,12 @@ export default class Customer{
 		this._address  = address;
 		if(eventDispatcher !==null){
 			const customerCreatedEvent: ChangeAddressEvent = new ChangeAddressEvent({
-				id: this._id,
+				id: this.id,
 				nome: this._name,
 				endereco: this._address.toString(),
 			});
 			eventDispatcher.notify(customerCreatedEvent);
 		}
-	}
-	 /**
-     * Getter id
-     * @return {string}
-     */
-	 public get id(): string {
-		return this._id;
 	}
 
 	public get Address(): Address {
